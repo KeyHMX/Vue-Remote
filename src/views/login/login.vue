@@ -1,28 +1,36 @@
 <template>
-  <div class="login">
-    <h2>login</h2>
-  </div>
+ <div class="login">
+    <div class="panel">
+        <div>
+            panel
+        </div>
+    </div>
+ </div>
 </template>
 
 <script setup lang="ts">
-import hyRequest from '@/service';
 
-console.log('--------')
-
-hyRequest
-.get({
-  url:'/home/multidata'
-})
-.then(
-  (res)=>{
-    console.log(res)
-  }
-)
 
 </script>
 
 <style lang="less" scoped>
 .login{
-    color:red
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width:100vw;
+    height: 100vh;
+    background: url('@/assets/img/login-bg.svg');
+}
+.panel{
+    display: flex;
+    width: 100px;
+    height: 100px;
+    justify-content: center;
+    align-items: center;
+    
+    background-color: yellow
+    
 }
 </style>
