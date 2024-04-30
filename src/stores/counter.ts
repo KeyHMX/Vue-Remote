@@ -10,8 +10,7 @@ const useCounterStore = defineStore('counter', {
     }
   },
   actions: {
-    changeCounterActions(newCounter: number) {
-      //不允许隐式any 可以在tsconfig设置 也可以像这样声明
+    changeCounterAction(newCounter: number) {
       this.counter = newCounter
     }
   }

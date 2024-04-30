@@ -5,7 +5,7 @@ enum CacheType {
 
 class Cache {
   storage: Storage
-
+  //这里的storage是node_moudle里的storage
   constructor(type: CacheType) {
     this.storage = type === CacheType.Local ? localStorage : sessionStorage
   }

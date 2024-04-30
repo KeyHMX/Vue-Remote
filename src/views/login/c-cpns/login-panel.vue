@@ -12,7 +12,7 @@
               <span class="text">帐号登录</span>
             </div>
           </template>
-          <pane-account />
+          <pane-account ref="accountRef" />
         </el-tab-pane>
         <!-- 手机登录的pane -->
         <el-tab-pane name="phone">
@@ -32,7 +32,7 @@
       <el-link type="info">忘记密码</el-link>
     </div>
 
-    <el-button class="login-btn" size="large" type="primary" @click="showMenu">
+    <el-button class="login-btn" size="large" type="primary" @click="handleBtnClick">
       立即登录
     </el-button>
   </div>
@@ -44,17 +44,22 @@ import { localCache } from '@/utils/cache'
 
 import paneAccount from './pane-account.vue'
 import panPhone from './pan-phone.vue'
+import PaneAccount from './pane-account.vue'
 
 const activeName = ref<string>('account')
+
+const accountRef = ref<InstanceType<typeof PaneAccount>>() //构造器
 
 const checked1 = ref<boolean>(localCache.getCache('checked1') ?? false)
 watch(checked1, (newValue) => {
   localCache.setCache('checked1', newValue)
 })
-
-const showMenu = () => {
+//showmenu 是初始定义的 目的是展示当前选中的子组件
+//这里改名为handleLoginBtnClick
+function handleBtnClick() {
   if (activeName.value === 'account') {
     console.log('执行用户登陆')
+    accountRef.value?.loginAction(checked1.value)
   } else {
     console.log('执行手机登陆')
   }
