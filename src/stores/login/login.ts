@@ -9,7 +9,7 @@ import useMainStore from '../main/main'
 
 interface ILoginState {
   token: string
-  userInfo: any
+  userInfo: any //这里可以用在线js转typescript工具
   userMenus: any
   permissions: string[]
 }
@@ -17,6 +17,7 @@ interface ILoginState {
 const useLoginStore = defineStore('login', {
   // 如何制定state的类型
   state: (): ILoginState => ({
+    //箭头函数跟返回值类型
     token: '',
     userInfo: {},
     userMenus: [],
@@ -34,11 +35,14 @@ const useLoginStore = defineStore('login', {
       const userInfoResult = await getUserInfoById(id)
       const userInfo = userInfoResult.data
       this.userInfo = userInfo
+      // console.log(userInfo)
+      //笑死了 执着的娃
 
       // 3.根据角色请求用户的权限(菜单menus)
       const userMenusResult = await getUserMenusByRoleId(this.userInfo.role.id)
       const userMenus = userMenusResult.data
       this.userMenus = userMenus
+      console.log(this.userMenus)
 
       // 4.进行本地缓存
       localCache.setCache('userInfo', userInfo)

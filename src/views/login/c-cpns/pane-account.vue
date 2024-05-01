@@ -10,6 +10,11 @@
     >
       <el-form-item label="帐号">
         <el-input v-model="account.name" />
+        <!-- 这里 v-model和 ：model是不一样的
+        v-model是双向绑定，说明这个组件里的值和
+        account里的值实时更新
+        而：model 表示v-bind：model 每个elform里的item都可以
+        绑定在account的一个具体的属性 -->
       </el-form-item>
       <el-form-item label="密码">
         <el-input v-model="account.password" show-password />
@@ -51,13 +56,16 @@ const loginStore = useLoginStore() //
 // 接收接口
 //reactive对象
 const account = reactive<IAccount>({
+  //若记录就将值赋给name和password从而自动写到input框去
   name: localCache.getCache(CACHE_NAME) ?? '',
-  password: localCache.getCache(CACHE_PASSWORD)
+  password: localCache.getCache(CACHE_PASSWORD) ?? ''
 })
-function loginAction(isRemPwd: boolean) {
+function loginAction(checked1: boolean) {
+  //还好是形参不影响
   // console.log('login')
   //这个validate需要看文档来学习使用方法
   formRef.value?.validate((valid) => {
+    //这个validate是elform——elm组件表单的方法，返回一个bool值（若验证成功）
     if (valid) {
       const name = account.name
       const password = account.password
@@ -65,7 +73,7 @@ function loginAction(isRemPwd: boolean) {
       //向服务器发送网络请求（携带账号和密码）
       loginStore.loginAccountAction({ name, password }).then(() => {
         // 判断是否需要记住密码
-        if (isRemPwd) {
+        if (checked1) {
           localCache.setCache(CACHE_NAME, name)
           localCache.setCache(CACHE_PASSWORD, password)
         } else {

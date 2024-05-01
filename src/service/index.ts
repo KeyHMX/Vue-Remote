@@ -6,6 +6,7 @@ import HYRequest from './request'
 const hyRequest = new HYRequest({
   baseURL: BASE_URL,
   timeout: TIME_OUT,
+  //拦截器
   interceptors: {
     requestSuccessFn: (config) => {
       // 每一个请求都自动携带token
@@ -14,6 +15,7 @@ const hyRequest = new HYRequest({
         // 类型缩小
         config.headers.Authorization = 'Bearer ' + token
       }
+      // console.log(config, 'yo')
       return config
     }
   }

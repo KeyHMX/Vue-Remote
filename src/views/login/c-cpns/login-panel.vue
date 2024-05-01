@@ -51,6 +51,7 @@ const activeName = ref<string>('account')
 const accountRef = ref<InstanceType<typeof PaneAccount>>() //构造器
 
 const checked1 = ref<boolean>(localCache.getCache('checked1') ?? false)
+
 watch(checked1, (newValue) => {
   localCache.setCache('checked1', newValue)
 })
@@ -60,6 +61,8 @@ function handleBtnClick() {
   if (activeName.value === 'account') {
     console.log('执行用户登陆')
     accountRef.value?.loginAction(checked1.value)
+    // 这里是父传子 把是否登录的值传给子组件，在子组件中
+    // 判断是否需要存储账号密码
   } else {
     console.log('执行手机登陆')
   }
