@@ -6,6 +6,7 @@ import { mapMenusToPermissions, mapMenusToRoutes } from '@/utils/map-menus'
 import router from '@/router'
 import { LOGIN_TOKEN } from '@/global/constants'
 import useMainStore from '../main/main'
+import type { RouteRecordRaw } from 'vue-router'
 
 interface ILoginState {
   token: string
@@ -57,8 +58,39 @@ const useLoginStore = defineStore('login', {
       this.permissions = permissions
 
       // 重要: 动态的添加路由
-      const routes = mapMenusToRoutes(userMenus)
-      routes.forEach((route) => router.addRoute('main', route))
+      //important！   动态路由！！！
+      //从文件中读取所有路由对象先存在数组中
+
+      // const routes = mapMenusToRoutes(userMenus)
+      // routes.forEach((route) => router.addRoute('main', route))
+      function loadLocalRoutes() {
+        const localRoutes: RouteRecordRaw[] = []
+        const files: Record<string, any> = import.meta.glob('../router/main/**/*.ts', {
+          eager: true
+        })
+        //将加载的对象放到localRoutes
+        for (const key in files) {
+          const module = files[key]
+          localRoutes.push(module.default)
+        }
+        return localRoutes
+      }
+
+      const localRoutes = loadLocalRoutes()
+
+      //2 根据菜单去匹配正确路由
+
+      const routes: RouteRecordRaw[] = []
+      for (const menu of userMenus) {
+        for (const submenu of menu.children) {
+          const route = localRoutes.find((item) => item.path === submenu.url)
+          if (route) {
+            router.addRoute('main', route)
+            routes.push(route)
+            console.log(route)
+          }
+        }
+      }
 
       // 5.页面跳转(main页面)
       router.push('/main')
@@ -89,10 +121,13 @@ const useLoginStore = defineStore('login', {
         //4.进行本地缓存
         localCache.setCache('userInfo', userInfo)
         localCache.setCache('userMenus', userMenus)
+        //尴尬，写错地方了
 
-        //important！   动态路由！！！
+        // const localRoutes: RouteRecordRaw[] = []
 
-        // const localRoutes:RouteRecordRaw[]:
+        // const files = import.meta.glob('../../router/main/**/*.ts', {
+        //   eager: true
+        // })
       }
     }
   }

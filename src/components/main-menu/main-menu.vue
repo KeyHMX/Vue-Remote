@@ -15,41 +15,6 @@
         active-text-color="#fff"
         default-active="3"
       >
-        <!-- <el-sub-menu index="1">
-          <template #title>
-            <el-icon><location /></el-icon>
-            <span>1</span>
-          </template>
-          <el-menu-item index="1-1">item one</el-menu-item>
-          <el-menu-item index="1-2">item two</el-menu-item>
-        </el-sub-menu>
-        <el-sub-menu index="2">
-          <template #title>
-            <el-icon><location /></el-icon>
-            <span>2</span>
-          </template>
-          <el-menu-item index="2-1">item one</el-menu-item>
-          <el-menu-item index="2-2">item two</el-menu-item>
-          <el-menu-item index="2-3">item one</el-menu-item>
-          <el-menu-item index="2-4">item two</el-menu-item>
-        </el-sub-menu>
-        <el-sub-menu index="3">
-          <template #title>
-            <el-icon><location /></el-icon>
-            <span>3</span>
-          </template>
-          <el-menu-item index="3-1">item one</el-menu-item>
-          <el-menu-item index="3-2">item two</el-menu-item>
-        </el-sub-menu>
-        <el-sub-menu index="4">
-          <template #title>
-            <el-icon><location /></el-icon>
-            <span>4</span>
-          </template>
-          <el-menu-item index="4-1">item one</el-menu-item>
-          <el-menu-item index="4-2">item two</el-menu-item>
-        </el-sub-menu> -->
-        <!-- 遍历整个菜单 -->
         <template v-for="item in menuList" :key="item.id">
           <el-sub-menu :index="item.id + ''">
             <template #title>
@@ -61,7 +26,7 @@
             </template>
 
             <template v-for="subitem in item.children" :key="subitem.id">
-              <el-menu-item :index="subitem.id + ''">
+              <el-menu-item :index="subitem.id + ''" @click="hanleItemClick(subitem)">
                 {{ subitem.name }}
               </el-menu-item>
             </template>
@@ -74,12 +39,19 @@
 
 <script setup lang="ts">
 import useLoginStore from '@/stores/login/login'
+import { useRouter } from 'vue-router'
 
 //拿到menulist
 const loginStore = useLoginStore()
 const menuList = loginStore.userMenus
+//注意这里名字和coderwhy取的不一样
 
-//props
+//监听item的点击
+const route = useRouter()
+function hanleItemClick(item: any) {
+  const url = item.url
+  route.push(url)
+}
 
 defineProps({
   isFold: {

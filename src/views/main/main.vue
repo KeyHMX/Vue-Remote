@@ -10,7 +10,9 @@
         <el-header height="30px">
           <mainHeader @fold-change="handleFoldChange" />
         </el-header>
-        <el-main>yo </el-main>
+        <el-main>
+          <router-view></router-view>
+        </el-main>
       </el-container>
     </el-container>
   </div>
