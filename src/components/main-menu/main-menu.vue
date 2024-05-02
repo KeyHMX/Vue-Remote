@@ -3,12 +3,13 @@
     <div class="logo-header">
       <img class="logo" src="@/assets/img/logo.svg" alt="" />
 
-      <div class="title">Key_H管理系统</div>
+      <div class="title" v-show="!isFold">Key_H管理系统</div>
     </div>
 
     <div class="menu">
       <!-- 在这里加上el-menu的默认颜色和样式 -->
       <el-menu
+        :collapse="isFold"
         background-color="#001529"
         text-color="#b7bdc3"
         active-text-color="#fff"
@@ -73,9 +74,19 @@
 
 <script setup lang="ts">
 import useLoginStore from '@/stores/login/login'
+
 //拿到menulist
 const loginStore = useLoginStore()
 const menuList = loginStore.userMenus
+
+//props
+
+defineProps({
+  isFold: {
+    type: Boolean,
+    default: false
+  }
+})
 </script>
 
 <style lang="less" scoped>

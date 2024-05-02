@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <div class="button">
     <button @click="handleClick">
       <span>退出</span>
@@ -21,4 +21,4 @@ function handleClick() {
   height: 20px;
   width: 20px;
 }
-</style>
+</style> -->

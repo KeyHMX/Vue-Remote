@@ -20,7 +20,14 @@
 import { ref } from 'vue'
 import headerCrumb from './c-cpns/header-crumb.vue'
 import headerInfo from './c-cpns/header-info.vue'
-function hanleMenuIconClick() {}
+//定义事件
+const emit = defineEmits(['foldChange'])
+
+function hanleMenuIconClick() {
+  isFold.value = !isFold.value
+  //这里子传父 emit
+  emit('foldChange', isFold.value)
+}
 const isFold = ref(false)
 </script>
 

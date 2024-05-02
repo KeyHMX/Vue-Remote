@@ -1,14 +1,16 @@
 <template>
   <div class="main">
     <el-container class="main-container">
-      <el-aside width="200px">
-        <mainMenu />
+      <el-aside :width="isFold ? '60px' : '210px'">
+        <mainMenu :is-fold="isFold" />
+        <!-- 这个is-fold怎么出来的，还是说可以随便起名 -->
+        <!-- 我记得这个是v-bind缩写 -->
       </el-aside>
       <el-container>
         <el-header height="30px">
-          <mainHeader />
+          <mainHeader @fold-change="handleFoldChange" />
         </el-header>
-        <el-main><Button /></el-main>
+        <el-main>yo </el-main>
       </el-container>
     </el-container>
   </div>
@@ -17,7 +19,15 @@
 <script setup lang="ts">
 import mainMenu from '@/components/main-menu/main-menu.vue'
 import mainHeader from '@/components/main-header/main-header.vue'
-import Button from '@/components/button/button.vue'
+// import Button from '@/components/button/button.vue'
+import { ref } from 'vue'
+
+const isFold = ref(false)
+//自定义事件，接收子传来的props
+function handleFoldChange(flag: boolean) {
+  isFold.value = flag
+  console.log(isFold.value)
+}
 </script>
 
 <style scoped lang="less">
@@ -56,7 +66,7 @@ import Button from '@/components/button/button.vue'
     scrollbar-width: none; /* firefox */
     -ms-overflow-style: none; /* IE 10+ */
 
-    // transition: width 0.3s linear;
+    transition: width 2s ease;
 
     &::-webkit-scrollbar {
       display: none;
