@@ -31,25 +31,6 @@ function handleFoldChange(flag: boolean) {
 </script>
 
 <style scoped lang="less">
-// .main {
-//   color: red;
-//   // height: 100vh;
-//   // width: 100vw;
-//   height: 100%;
-//   .container {
-//     height: 100%;
-//     .el-aside {
-//       background-color: #001529;
-//       height: 100%;
-//     }
-//     .el-header {
-//       background-color: aliceblue;
-//     }
-//     .el-main {
-//       background-color: aqua;
-//     }
-//   }
-// }
 .main {
   height: 100%;
 }
