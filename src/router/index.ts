@@ -28,7 +28,7 @@ const router = createRouter({
 //路由守卫
 router.beforeEach((to) => {
   const token = localCache.getCache(LOGIN_TOKEN)
-  if (to.path === '/main' && !token) {
+  if (to.path.startsWith('/main') && !token) {
     ///注意是topath
 
     // return token ? '/main' : '/login'
