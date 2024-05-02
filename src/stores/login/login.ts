@@ -89,6 +89,10 @@ const useLoginStore = defineStore('login', {
         //4.进行本地缓存
         localCache.setCache('userInfo', userInfo)
         localCache.setCache('userMenus', userMenus)
+
+        //important！   动态路由！！！
+
+        // const localRoutes:RouteRecordRaw[]:
       }
     }
   }
