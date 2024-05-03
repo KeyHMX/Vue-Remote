@@ -13,7 +13,7 @@
         background-color="#001529"
         text-color="#b7bdc3"
         active-text-color="#fff"
-        default-active="3"
+        :default-active="defaultActive"
       >
         <template v-for="item in menuList" :key="item.id">
           <el-sub-menu :index="item.id + ''">
@@ -39,7 +39,9 @@
 
 <script setup lang="ts">
 import useLoginStore from '@/stores/login/login'
-import { useRouter } from 'vue-router'
+import { menuToPath } from '@/utils/map-manus'
+import { ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 
 //拿到menulist
 const loginStore = useLoginStore()
@@ -47,12 +49,20 @@ const menuList = loginStore.userMenus
 //注意这里名字和coderwhy取的不一样
 
 //监听item的点击
-const route = useRouter()
+const router = useRouter()
 function hanleItemClick(item: any) {
   // console.log(item.url)
   const url = item.url
-  route.push(url)
+  router.push(url)
 }
+
+//绑定一下默认值(菜单)
+const route = useRoute()
+console.log(route)
+const path = menuToPath(route.path, menuList) //其实实现了，但是这个刷新简直会让我疯掉
+
+console.log(path)
+const defaultActive = ref(path.id + '')
 
 defineProps({
   isFold: {
