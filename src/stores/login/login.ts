@@ -2,11 +2,11 @@ import { defineStore } from 'pinia'
 import { accountLoginRequest, getUserInfoById, getUserMenusByRoleId } from '@/service/login/login'
 import type { IAccount } from '@/type/login'
 import { localCache } from '@/utils/cache'
-import { mapMenusToPermissions, mapMenusToRoutes } from '@/utils/map-menus'
+// import { mapMenusToPermissions, mapMenusToRoutes } from '@/utils/map-menus'
 import router from '@/router'
 import { LOGIN_TOKEN } from '@/global/constants'
 import useMainStore from '../main/main'
-import type { RouteRecordRaw } from 'vue-router'
+import { mapMenusToRoutes } from '@/utils/map-manus'
 
 interface ILoginState {
   token: string
@@ -43,7 +43,7 @@ const useLoginStore = defineStore('login', {
       const userMenusResult = await getUserMenusByRoleId(this.userInfo.role.id)
       const userMenus = userMenusResult.data
       this.userMenus = userMenus
-      console.log(this.userMenus)
+      // console.log(this.userMenus)
 
       // 4.进行本地缓存
       localCache.setCache('userInfo', userInfo)
@@ -54,44 +54,49 @@ const useLoginStore = defineStore('login', {
       mainStore.fetchEntireDataAction()
 
       // 重要: 获取登录用户的所有按钮的权限
-      const permissions = mapMenusToPermissions(userMenus)
-      this.permissions = permissions
+
+      // const permissions = mapMenusToPermissions(userMenus)
+      // this.permissions = permissions
+
+      // const routes = mapMenusToRoutes(userMenus)
+      // routes.forEach((route) => router.addRoute('main', route))
+
+      // function loadLocalRoutes() {
+      //   const localRoutes: RouteRecordRaw[] = []
+      //   const files: Record<string, any> = import.meta.glob('../router/main/**/*.ts', {
+      //     eager: true
+      //   })
+      //   //将加载的对象放到localRoutes
+      //   for (const key in files) {
+      //     const module = files[key]
+      //     localRoutes.push(module.default)
+      //   }
+      //   return localRoutes
+      // }
+
+      // const localRoutes = loadLocalRoutes()
+
+      //2 根据菜单去匹配正确路由
+
+      // const routes: RouteRecordRaw[] = []
+      // for (const menu of userMenus) {
+      //   for (const submenu of menu.children) {
+      //     const route = localRoutes.find((item) => item.path === submenu.url)
+      //     if (route) {
+      //       router.addRoute('main', route)
+      //       routes.push(route)
+      //       console.log(route)
+      //     }
+      //   }
+      // }
 
       // 重要: 动态的添加路由
       //important！   动态路由！！！
       //从文件中读取所有路由对象先存在数组中
-
-      // const routes = mapMenusToRoutes(userMenus)
-      // routes.forEach((route) => router.addRoute('main', route))
-      function loadLocalRoutes() {
-        const localRoutes: RouteRecordRaw[] = []
-        const files: Record<string, any> = import.meta.glob('../router/main/**/*.ts', {
-          eager: true
-        })
-        //将加载的对象放到localRoutes
-        for (const key in files) {
-          const module = files[key]
-          localRoutes.push(module.default)
-        }
-        return localRoutes
-      }
-
-      const localRoutes = loadLocalRoutes()
-
-      //2 根据菜单去匹配正确路由
-
-      const routes: RouteRecordRaw[] = []
-      for (const menu of userMenus) {
-        for (const submenu of menu.children) {
-          const route = localRoutes.find((item) => item.path === submenu.url)
-          if (route) {
-            router.addRoute('main', route)
-            routes.push(route)
-            console.log(route)
-          }
-        }
-      }
-
+      // console.log(userMenus)
+      const routes = mapMenusToRoutes(userMenus)
+      routes.forEach((route) => router.addRoute('main', route))
+      // console.log(routes)
       // 5.页面跳转(main页面)
       router.push('/main')
     },
@@ -101,7 +106,9 @@ const useLoginStore = defineStore('login', {
       const token = localCache.getCache(LOGIN_TOKEN)
       const userInfo = localCache.getCache('userInfo')
       const userMenus = localCache.getCache('userMenus')
+
       if (token && userInfo && userMenus) {
+        console.log('yo')
         this.token = token
         this.userInfo = userInfo
         this.userMenus = userMenus
@@ -111,23 +118,16 @@ const useLoginStore = defineStore('login', {
         mainStore.fetchEntireDataAction()
 
         // 2.获取按钮的权限
-        const permissions = mapMenusToPermissions(userMenus)
-        this.permissions = permissions
+        // const permissions = mapMenusToPermissions(userMenus)
+        // this.permissions = permissions
 
         // 3.动态添加路由
-        const routes = mapMenusToRoutes(userMenus)
-        routes.forEach((route) => router.addRoute('main', route))
+        // const routes = mapMenusToRoutes(userMenus)
+        // routes.forEach((route) => router.addRoute('main', route))
 
         //4.进行本地缓存
         localCache.setCache('userInfo', userInfo)
         localCache.setCache('userMenus', userMenus)
-        //尴尬，写错地方了
-
-        // const localRoutes: RouteRecordRaw[] = []
-
-        // const files = import.meta.glob('../../router/main/**/*.ts', {
-        //   eager: true
-        // })
       }
     }
   }

@@ -18,6 +18,7 @@ const useMainStore = defineStore('main', {
       const rolesResult = await getEntireRoles()
       const departmentsResult = await getEntireDepartments()
       const menuResult = await getEntireMenus()
+      // console.log(menuResult)
 
       // 保存数据
       this.entireRoles = rolesResult.data.list

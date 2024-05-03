@@ -15,7 +15,7 @@
       </div>
       <div class="user-info">
         <div class="block">
-          <el-avatar :size="28" src="@/assets/img/R.jpg" />
+          <!-- <el-avatar :size="28" src="@/assets/img/R.jpg" /> -->
           <!-- 这里图片不生效 -->
         </div>
         <el-dropdown :hide-on-click="false">

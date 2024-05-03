@@ -49,6 +49,7 @@ const menuList = loginStore.userMenus
 //监听item的点击
 const route = useRouter()
 function hanleItemClick(item: any) {
+  // console.log(item.url)
   const url = item.url
   route.push(url)
 }

@@ -1,5 +1,6 @@
 import { LOGIN_TOKEN } from '@/global/constants'
 import { localCache } from '@/utils/cache'
+// import { firstMenu } from '@/utils/map-menus'
 import { createRouter, createWebHashHistory } from 'vue-router'
 
 const router = createRouter({
@@ -12,11 +13,14 @@ const router = createRouter({
     },
     {
       path: '/login',
-      component: () => import('@/views/login/login.vue')
+      component: () => import('@/views/login/login.vue'),
+      children: []
     },
     {
       path: '/main',
-      component: () => import('@/views/main/main.vue')
+      name: 'main', //乖乖，这个可真重要啊，困住老子快一个下午
+      component: () => import('@/views/main/main.vue'),
+      children: []
     },
     {
       path: '/:pathMatch(.*)',
@@ -34,6 +38,9 @@ router.beforeEach((to) => {
     // return token ? '/main' : '/login'
     return '/login'
   }
+  // if (to.path === '/main') {
+  //   return firstMenu?.url
+  // }
 })
 
 export default router
