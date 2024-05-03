@@ -3,6 +3,7 @@ import { localCache } from '@/utils/cache'
 // import { firstMenu } from '@/utils/map-menus'
 import { createRouter, createWebHashHistory } from 'vue-router'
 
+import { firstMenu } from '@/utils/map-manus'
 const router = createRouter({
   history: createWebHashHistory(),
   routes: [
@@ -37,6 +38,9 @@ router.beforeEach((to) => {
 
     // return token ? '/main' : '/login'
     return '/login'
+  }
+  if (to.path === '/main') {
+    return firstMenu?.url
   }
   // if (to.path === '/main') {
   //   return firstMenu?.url
