@@ -43,3 +43,18 @@ export function menuToPath(path: string, userMenus: any[]) {
     }
   }
 }
+
+export function menuToBreadCrumbs(path: string, userMenus: any[]) {
+  const breadcrumbs: any[] = []
+  for (const item of userMenus) {
+    for (const subitem of item.children) {
+      if (subitem.url === path) {
+        //顶层菜单
+        breadcrumbs.push({ name: item.name, path: item.url })
+        //匹配菜单
+        breadcrumbs.push({ name: subitem.name, path: subitem.url })
+      }
+    }
+  }
+  return breadcrumbs
+}

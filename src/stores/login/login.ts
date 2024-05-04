@@ -122,8 +122,8 @@ const useLoginStore = defineStore('login', {
         // this.permissions = permissions
 
         // 3.动态添加路由
-        // const routes = mapMenusToRoutes(userMenus)
-        // routes.forEach((route) => router.addRoute('main', route))
+        const routes = mapMenusToRoutes(userMenus)
+        routes.forEach((route) => router.addRoute('main', route))
 
         //4.进行本地缓存
         localCache.setCache('userInfo', userInfo)

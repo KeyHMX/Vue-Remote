@@ -8,6 +8,7 @@ import router from './router'
 import pinia from './stores'
 import registerIcons from './global/register-icons'
 import useLoginStore from './stores/login/login'
+// import store from './stores'
 
 const app = createApp(App)
 
@@ -19,6 +20,7 @@ app.use(createPinia())
 
 const loginStore = useLoginStore()
 loginStore.loadLocalCacheAction()
+// app.use(store)
 app.use(router) //放这里更好
 router.isReady()
 app.mount('#app')

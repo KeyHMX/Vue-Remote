@@ -1,14 +1,22 @@
 <template>
   <div class="left">
     <el-breadcrumb :separator-icon="ArrowRight">
-      <el-breadcrumb-item :to="{ path: '/' }">homepage</el-breadcrumb-item>
-      <el-breadcrumb-item>promotion management</el-breadcrumb-item>
+      <template v-for="item in breadcrumbs" :key="item.name">
+        <el-breadcrumb-item :to="item.path">{{ item.name }}</el-breadcrumb-item>
+      </template>
     </el-breadcrumb>
   </div>
 </template>
 
 <script setup lang="ts">
+// import useLoginStore from '@/stores/login/login';
 import { ArrowRight } from '@element-plus/icons-vue'
+import { menuToBreadCrumbs } from '../../../utils/map-manus'
+import { useRoute } from 'vue-router'
+import useLoginStore from '@/stores/login/login'
+const userMenus = useLoginStore().userMenus
+const route = useRoute()
+const breadcrumbs = menuToBreadCrumbs(route.path, userMenus)
 </script>
 
 <style scoped>
