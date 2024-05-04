@@ -14,9 +14,12 @@ import { ArrowRight } from '@element-plus/icons-vue'
 import { menuToBreadCrumbs } from '../../../utils/map-manus'
 import { useRoute } from 'vue-router'
 import useLoginStore from '@/stores/login/login'
+import { computed } from 'vue'
 const userMenus = useLoginStore().userMenus
 const route = useRoute()
-const breadcrumbs = menuToBreadCrumbs(route.path, userMenus)
+const breadcrumbs = computed(() => {
+  return menuToBreadCrumbs(route.path, userMenus)
+})
 </script>
 
 <style scoped>

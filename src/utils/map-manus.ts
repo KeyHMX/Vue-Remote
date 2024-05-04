@@ -15,6 +15,7 @@ export function loadRouteCache() {
   return localRoutes
 }
 export let firstMenu: any = null
+//根据菜单去匹配正确的路由
 export function mapMenusToRoutes(userMenus: any) {
   // console.log(localRoutes)
   const routes: RouteRecordRaw[] = []
@@ -23,7 +24,13 @@ export function mapMenusToRoutes(userMenus: any) {
   for (const item of userMenus) {
     for (const submenu of item.children) {
       const route = localRoutes.find((item) => item.path === submenu.url)
-      if (route) routes.push(route)
+      //点击一级菜单重定向
+      if (route) {
+        if (!routes.find((e) => e.path === item.url)) {
+          routes.push({ path: item.url, redirect: route.path })
+        }
+        routes.push(route)
+      }
       if (route && !firstMenu) firstMenu = submenu
     }
   }
@@ -56,5 +63,6 @@ export function menuToBreadCrumbs(path: string, userMenus: any[]) {
       }
     }
   }
+  console.log(breadcrumbs)
   return breadcrumbs
 }

@@ -40,7 +40,7 @@
 <script setup lang="ts">
 import useLoginStore from '@/stores/login/login'
 import { menuToPath } from '@/utils/map-manus'
-import { ref } from 'vue'
+import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 //拿到menulist
@@ -56,14 +56,18 @@ function hanleItemClick(item: any) {
   router.push(url)
 }
 
+// console.log(route)
+// const path = menuToPath(route.path, menuList) //其实实现了，但是这个刷新简直会让我疯掉 嘿嘿已解决
+// console.log(path)
+// const defaultActive = ref(path.id + '')
+
 //绑定一下默认值(菜单)
 const route = useRoute()
-console.log(route)
-const path = menuToPath(route.path, menuList) //其实实现了，但是这个刷新简直会让我疯掉
 
-console.log(path)
-const defaultActive = ref(path.id + '')
-
+const defaultActive = computed(() => {
+  const path = menuToPath(route.path, menuList)
+  return path.id + ''
+})
 defineProps({
   isFold: {
     type: Boolean,
