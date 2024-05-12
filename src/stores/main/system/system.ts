@@ -21,9 +21,9 @@ const useSystemStore = defineStore('system', {
     pageTotalCount: 0
   }),
   actions: {
-    async postUsersListAction() {
+    async postUsersListAction(queryInfo: any) {
       //queryInfo: any
-      const usersListResult = await postUsersListData() //queryInfo
+      const usersListResult = await postUsersListData(queryInfo) //queryInfo
       const { totalCount, list } = usersListResult.data
       this.usersTotalCount = totalCount
       this.usersList = list
@@ -34,7 +34,7 @@ const useSystemStore = defineStore('system', {
       console.log(deleteResult)
 
       // 2.重新请求新的数据
-      this.postUsersListAction() //{ offset: 0, size: 10 }
+      this.postUsersListAction({ offset: 0, size: 10 }) //{ offset: 0, size: 10 }
     },
     async newUserDataAction(userInfo: any) {
       // 1.创建新的用户
@@ -42,7 +42,7 @@ const useSystemStore = defineStore('system', {
       console.log(newResult)
 
       // 2.重新请求新的数据
-      this.postUsersListAction() //{ offset: 0, size: 10 }
+      this.postUsersListAction({ offset: 0, size: 10 }) //{ offset: 0, size: 10 }
     },
     async editUserDataAction(id: number, userInfo: any) {
       // 1.更新用户的数据
@@ -50,7 +50,7 @@ const useSystemStore = defineStore('system', {
       console.log(editResult)
 
       // 2.重新请求新的数据
-      this.postUsersListAction() //{ offset: 0, size: 10 }
+      this.postUsersListAction({ offset: 0, size: 10 }) //{ offset: 0, size: 10 }
     },
 
     /** 针对页面的数据: 增删改查 */

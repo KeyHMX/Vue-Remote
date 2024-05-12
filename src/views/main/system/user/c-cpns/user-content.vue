@@ -39,6 +39,17 @@
         </el-table-column>
       </el-table>
     </div>
+    <div class="footer">
+      <el-pagination
+        v-model:current-page="currentPage"
+        v-model:page-size="pageSize"
+        :page-sizes="[5, 10, 20, 30, 40]"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="400"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+      />
+    </div>
   </div>
 </template>
 
@@ -46,16 +57,35 @@
 import useSystemStore from '@/stores/main/system/system'
 import { turnToBeijing } from '@/utils/format'
 import { storeToRefs } from 'pinia'
+import { ref } from 'vue'
 //发起action 请求userlist的数据
 const systemStore = useSystemStore()
-systemStore.postUsersListAction()
+const currentPage = ref(1)
+const pageSize = ref(5)
+// systemStore.postUsersListAction()
 
 //获取userlist数据，进行展示
 //但这是异步的 可用computed
 
 const { usersList } = storeToRefs(systemStore) //为何用解构呢
-
+fetchUserListData()
 // console.log(usersList)
+
+function handleSizeChange() {
+  fetchUserListData()
+}
+function handleCurrentChange() {
+  fetchUserListData()
+}
+
+//定义函数 用来发送网络请求
+function fetchUserListData() {
+  const size = pageSize.value
+  const offset = (currentPage.value - 1) * size
+  const info = { size, offset }
+  //发起网络请求
+  systemStore.postUsersListAction(info)
+}
 </script>
 
 <style scoped>
