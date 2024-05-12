@@ -10,7 +10,7 @@
         <el-header height="30px">
           <mainHeader @fold-change="handleFoldChange" />
         </el-header>
-        <el-main>
+        <el-main class="el-main">
           <router-view></router-view>
         </el-main>
       </el-container>
@@ -55,9 +55,8 @@ function handleFoldChange(flag: boolean) {
       display: none;
     }
   }
-
-  .el-main {
-    background-color: #f0f2f5;
-  }
+}
+::v-deep(.el-main) {
+  background-color: #f0f2f5 !important;
 }
 </style>
