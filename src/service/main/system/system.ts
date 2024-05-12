@@ -1,10 +1,15 @@
 import hyRequest from '@/service'
 
 /** 用户的网络请求 */
-export function postUsersListData(queryInfo: any) {
+export function postUsersListData() {
+  //queryInfo: any
   return hyRequest.post({
     url: '/users/list',
-    data: queryInfo
+    //queryInfo{
+    data: {
+      offset: 0,
+      size: 10
+    }
   })
 }
 
