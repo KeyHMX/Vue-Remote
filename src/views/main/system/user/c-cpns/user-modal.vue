@@ -15,7 +15,7 @@
 import { ref } from 'vue'
 const dialogVisible = ref(false)
 const setDialogVisible = () => {
-  dialogVisible.value = false
+  dialogVisible.value = true
 }
 defineExpose({ setDialogVisible })
 </script>

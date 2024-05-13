@@ -2,7 +2,7 @@
   <div class="app">
     <div class="header">
       <h3 class="title">用户列表</h3>
-      <el-button type="primary">新建用户</el-button>
+      <el-button type="primary" @click="handleModalCall">新建用户</el-button>
     </div>
     <div class="table">
       <el-table :data="usersList" style="width: 100%">
@@ -60,7 +60,7 @@ import useSystemStore from '@/stores/main/system/system'
 import { turnToBeijing } from '@/utils/format'
 import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
-
+import { defineEmits } from 'vue'
 //发起action 请求userlist的数据
 const systemStore = useSystemStore()
 const currentPage = ref(1)
@@ -95,6 +95,12 @@ function fetchUserListData(formData: any = {}) {
 //delete actions
 const handleDeleteBtnClick = (id: any) => {
   systemStore.deleteUserByIdAction(id)
+}
+
+//emit the modal action
+const emit = defineEmits(['modalCall']) //call the new modal window action
+const handleModalCall = () => {
+  emit('modalCall')
 }
 defineExpose({ fetchUserListData })
 </script>
