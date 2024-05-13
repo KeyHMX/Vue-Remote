@@ -32,9 +32,11 @@
           </template>
         </el-table-column>
         <el-table-column fixed="right" label="操作" width="120" align="center">
-          <template #default>
+          <template #default="scope">
             <el-button link type="primary" size="small">编辑</el-button>
-            <el-button link type="primary" size="small">删除</el-button>
+            <el-button link type="primary" size="small" @click="handleDeleteBtnClick(scope.row.id)"
+              >删除</el-button
+            >
           </template>
         </el-table-column>
       </el-table>
@@ -58,10 +60,12 @@ import useSystemStore from '@/stores/main/system/system'
 import { turnToBeijing } from '@/utils/format'
 import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
+
 //发起action 请求userlist的数据
 const systemStore = useSystemStore()
 const currentPage = ref(1)
 const pageSize = ref(10)
+
 // systemStore.postUsersListAction()
 
 //获取userlist数据，进行展示
@@ -86,6 +90,11 @@ function fetchUserListData(formData: any = {}) {
   //发起网络请求
   const formInfo = { ...formData, ...info }
   systemStore.postUsersListAction(formInfo)
+}
+
+//delete actions
+const handleDeleteBtnClick = (id: any) => {
+  systemStore.deleteUserByIdAction(id)
 }
 defineExpose({ fetchUserListData })
 </script>
