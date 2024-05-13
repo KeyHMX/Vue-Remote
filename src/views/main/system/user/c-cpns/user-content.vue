@@ -43,7 +43,7 @@
       <el-pagination
         v-model:current-page="currentPage"
         v-model:page-size="pageSize"
-        :page-sizes="[5, 10, 20, 30, 40]"
+        :page-sizes="[10, 20, 30, 40]"
         layout="total, sizes, prev, pager, next, jumper"
         :total="400"
         @size-change="handleSizeChange"
@@ -61,7 +61,7 @@ import { ref } from 'vue'
 //发起action 请求userlist的数据
 const systemStore = useSystemStore()
 const currentPage = ref(1)
-const pageSize = ref(5)
+const pageSize = ref(10)
 // systemStore.postUsersListAction()
 
 //获取userlist数据，进行展示
@@ -79,13 +79,15 @@ function handleCurrentChange() {
 }
 
 //定义函数 用来发送网络请求
-function fetchUserListData() {
+function fetchUserListData(formData: any = {}) {
   const size = pageSize.value
   const offset = (currentPage.value - 1) * size
   const info = { size, offset }
   //发起网络请求
-  systemStore.postUsersListAction(info)
+  const formInfo = { ...formData, ...info }
+  systemStore.postUsersListAction(formInfo)
 }
+defineExpose({ fetchUserListData })
 </script>
 
 <style scoped>

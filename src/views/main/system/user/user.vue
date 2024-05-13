@@ -1,7 +1,7 @@
 <template>
   <div class="user">
-    <user-search />
-    <user-content />
+    <user-search @query-data="handleQueryData" @reset-data="handleResetData" />
+    <user-content ref="contentRef" />
     <div class="content"></div>
   </div>
 </template>
@@ -9,6 +9,15 @@
 <script setup lang="ts" name="user">
 import userSearch from './c-cpns/user-search.vue'
 import userContent from './c-cpns/user-content.vue'
+import { ref } from 'vue'
+
+const contentRef = ref<InstanceType<typeof userContent>>()
+const handleQueryData = (formData: any) => {
+  contentRef.value?.fetchUserListData(formData)
+}
+const handleResetData = () => {
+  contentRef.value?.fetchUserListData()
+}
 </script>
 
 <style scoped>

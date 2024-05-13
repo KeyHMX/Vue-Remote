@@ -49,8 +49,13 @@
       <el-button type="default" size="default" icon="Refresh" @click="handleResetClick"
         >重置</el-button
       >
-      <el-button type="primary" size="default" icon="Search" style="margin-right: 20px"
-        >搜索</el-button
+      <el-button
+        type="primary"
+        size="default"
+        icon="Search"
+        style="margin-right: 20px"
+        @click="handleQueryClick"
+        >查询</el-button
       >
     </div>
   </div>
@@ -59,11 +64,18 @@
 <script setup lang="ts">
 import { ElForm } from 'element-plus'
 import { reactive, ref } from 'vue'
+import { defineEmits } from 'vue'
 
 const formRef = ref<InstanceType<typeof ElForm>>()
 // 重置操作
 const handleResetClick = () => {
   formRef.value?.resetFields()
+  emit('resetData')
+}
+const emit = defineEmits(['queryData', 'resetData'])
+
+const handleQueryClick = () => {
+  emit('queryData', searchForm)
 }
 
 const searchForm = reactive({
