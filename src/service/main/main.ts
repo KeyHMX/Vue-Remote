@@ -5,7 +5,10 @@ export function getEntireRoles() {
     url: '/role/list'
   })
 }
-
+/**
+ *
+ * @returns 请求所有部门
+ */
 export function getEntireDepartments() {
   return hyRequest.post({
     url: '/department/list'

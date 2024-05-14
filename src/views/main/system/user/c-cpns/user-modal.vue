@@ -17,24 +17,25 @@
           </el-form-item>
           <el-form-item label="选择角色" prop="roleId">
             <el-select v-model="formData.roleId" placeholder="请选择角色" style="width: 100%">
-              <!-- <template v-for="item in entireRoles" :key="item.id">
+              <template v-for="item in entireRoles" :key="item.id">
                 <el-option :label="item.name" :value="item.id" />
-              </template> -->
+                <!-- 其实这里的value起到的是一个定位的作用 -->
+              </template>
             </el-select>
           </el-form-item>
           <el-form-item label="选择部门" prop="departmentId">
             <el-select v-model="formData.departmentId" placeholder="请选择部门" style="width: 100%">
-              <!-- <template v-for="item in entireDepartments" :key="item.id">
+              <template v-for="item in entireDepartments" :key="item.id">
                 <el-option :label="item.name" :value="item.id" />
-              </template> -->
+              </template>
             </el-select>
           </el-form-item>
         </el-form>
       </div>
       <template #footer>
         <div class="dialog-footer">
-          <el-button @click="dialogVisible = false">1</el-button>
-          <el-button type="primary" @click="dialogVisible = false"> Confirm </el-button>
+          <el-button @click="dialogVisible = false">取消</el-button>
+          <el-button type="primary" @click="dialogVisible = false">确定</el-button>
         </div>
       </template>
     </el-dialog>
@@ -42,6 +43,8 @@
 </template>
 
 <script setup lang="ts">
+import useMainStore from '@/stores/main/main'
+import { storeToRefs } from 'pinia'
 import { reactive } from 'vue'
 import { ref } from 'vue'
 const dialogVisible = ref(false)
@@ -56,10 +59,24 @@ const formData = reactive<any>({
   roleId: '',
   departmentId: ''
 })
+
+//请求数据了
+const mainStore = useMainStore()
+
+const { entireDepartments, entireRoles } = storeToRefs(mainStore) //保持响应式，即若更改了服务器的值也会同步修改
 defineExpose({ setDialogVisible })
 </script>
 
-<style scoped>
+<style lang="less" scoped>
+.dialog-footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+::v-deep .el-dialog__footer {
+  padding-top: 0;
+}
+
 .modal {
 }
 </style>
