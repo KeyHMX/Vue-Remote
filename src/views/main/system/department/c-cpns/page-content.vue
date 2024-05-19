@@ -1,26 +1,18 @@
 <template>
   <div class="app">
     <div class="header">
-      <h3 class="title">用户列表</h3>
-      <el-button type="primary" @click="handleModalCall">新建用户</el-button>
+      <h3 class="title">部门列表</h3>
+      <el-button type="primary" @click="handleModalCall">新建部门</el-button>
     </div>
     <div class="table">
-      <el-table :data="usersList" style="width: 100%">
+      <el-table :data="pageList" style="width: 100%">
         <el-table-column type="selection" align="center" width="30" />
         <el-table-column type="index" label="序号" width="80" align="center" />
 
-        <el-table-column prop="name" label="用户名" width="120" align="center" />
-        <el-table-column prop="realname" label="真实名" width="120" align="center" />
-        <el-table-column prop="cellphone" label="手机号码" width="140" align="center" />
-        <el-table-column prop="enable" label="状态" width="160" align="center">
-          <template #default="scope">
-            <el-button plain :type="scope.row.enable ? 'primary' : 'danger'" size="small">
-              {{ scope.row.enable ? '启用' : '禁用' }}
-            </el-button>
+        <el-table-column prop="name" label="部门名" width="120" align="center" />
+        <el-table-column prop="leader" label="部门领导" width="120" align="center" />
+        <el-table-column prop="parentId" label="上级部门" width="140" align="center" />
 
-            <!-- //作用域插槽 -->
-          </template>
-        </el-table-column>
         <el-table-column prop="createAt" label="创建时间" width="200" align="center">
           <template #default="scope">
             {{ turnToBeijing(scope.row.createAt) }}
@@ -47,7 +39,7 @@
         v-model:page-size="pageSize"
         :page-sizes="[10, 20, 30, 40]"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="usersTotalCount"
+        :total="pageTotalCount"
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
       />
@@ -71,30 +63,30 @@ const pageSize = ref(10)
 //获取userlist数据，进行展示
 //但这是异步的 可用computed
 
-const { usersList, usersTotalCount } = storeToRefs(systemStore) //为何用解构呢
-fetchUserListData()
+const { pageList, pageTotalCount } = storeToRefs(systemStore) //为何用解构呢
+fetchPageListData()
 // console.log(usersList)
 
 function handleSizeChange() {
-  fetchUserListData()
+  fetchPageListData()
 }
 function handleCurrentChange() {
-  fetchUserListData()
+  fetchPageListData()
 }
 
 //定义函数 用来发送网络请求
-function fetchUserListData(formData: any = {}) {
+function fetchPageListData(formData: any = {}) {
   const size = pageSize.value
   const offset = (currentPage.value - 1) * size
   const info = { size, offset }
   //发起网络请求
   const formInfo = { ...formData, ...info }
-  systemStore.postUsersListAction(formInfo)
+  systemStore.postPageListAction('department', formInfo)
 }
 
 //delete actions
 const handleDeleteBtnClick = (id: any) => {
-  systemStore.deleteUserByIdAction(id)
+  systemStore.deletePageByIdAction('department', id)
 }
 
 //emit the modal action
@@ -102,7 +94,7 @@ const emit = defineEmits(['modalCall']) //call the new modal window action
 const handleModalCall = () => {
   emit('modalCall')
 }
-defineExpose({ fetchUserListData })
+defineExpose({ fetchPageListData })
 </script>
 
 <style scoped>

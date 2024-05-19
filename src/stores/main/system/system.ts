@@ -60,6 +60,7 @@ const useSystemStore = defineStore('system', {
 
       this.pageList = list
       this.pageTotalCount = totalCount
+      // console.log(pageListResult, 'yo')这里没问题可以调起来
     },
     async deletePageByIdAction(pageName: string, id: number) {
       const deleteResult = await deletePageById(pageName, id)

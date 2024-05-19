@@ -1,6 +1,6 @@
 <template>
   <div class="app">
-    <el-dialog v-model="dialogVisible" title="Warning" width="500" align-center>
+    <el-dialog v-model="dialogVisible" title="请选择" width="500" align-center>
       <div class="form">
         <el-form :model="formData" label-width="80px" size="large">
           <el-form-item label="用户名" prop="name">
@@ -35,7 +35,7 @@
       <template #footer>
         <div class="dialog-footer">
           <el-button @click="dialogVisible = false">取消</el-button>
-          <el-button type="primary" @click="dialogVisible = false">确定</el-button>
+          <el-button type="primary" @click="handleConfirmClick">确定</el-button>
         </div>
       </template>
     </el-dialog>
@@ -47,23 +47,34 @@ import useMainStore from '@/stores/main/main'
 import { storeToRefs } from 'pinia'
 import { reactive } from 'vue'
 import { ref } from 'vue'
+
+import useSystemStore from '@/stores/main/system/system'
 const dialogVisible = ref(false)
-const setDialogVisible = () => {
-  dialogVisible.value = true
-}
+
 const formData = reactive<any>({
   name: '',
   realname: '',
   password: '',
-  cellphone: '',
+  cellphone: '', //这里很奇怪，必须要输入手机号码才生效 不知道是什么原理
   roleId: '',
   departmentId: ''
 })
 
 //请求数据了
 const mainStore = useMainStore()
-
+const systemStore = useSystemStore()
 const { entireDepartments, entireRoles } = storeToRefs(mainStore) //保持响应式，即若更改了服务器的值也会同步修改
+
+//点击取消时仅仅关闭即可
+const setDialogVisible = () => {
+  dialogVisible.value = true
+}
+
+//点击确定时的逻辑——调用接口进行数据的上传
+const handleConfirmClick = () => {
+  dialogVisible.value = false
+  systemStore.newUserDataAction(formData)
+}
 defineExpose({ setDialogVisible })
 </script>
 
