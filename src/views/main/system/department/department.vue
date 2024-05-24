@@ -1,6 +1,10 @@
 <template>
   <div class="department">
-    <page-search @query-data="handleQureyClick" @reset-data="handleResetClick" />
+    <page-search
+      :search-config="searchConfig"
+      @query-data="handleQureyClick"
+      @reset-data="handleResetClick"
+    />
     <!-- 哈哈，这里就是这个原因 query-data是因为在子组件中emit中的是'querydata' -->
     <page-content ref="contentRef" @modal-call="handleModalCall" @edit-call="handleEditCall" />
 
@@ -9,10 +13,11 @@
 </template>
 
 <script setup lang="ts" name="department">
-import pageSearch from './c-cpns/page-search.vue'
+import pageSearch from '@/components/page-search/page-search.vue'
 import pageContent from './c-cpns/page-content.vue'
 import pageModal from './c-cpns/page-modal.vue'
 import { ref } from 'vue'
+import searchConfig from './config/search.config'
 
 const contentRef = ref<InstanceType<typeof pageContent>>()
 const modalRef = ref<InstanceType<typeof pageModal>>()
