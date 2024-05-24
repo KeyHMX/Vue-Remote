@@ -1,7 +1,7 @@
 <template>
   <div class="user">
     <user-search @query-data="handleQueryData" @reset-data="handleResetData" />
-    <user-content ref="contentRef" @modal-call="handleModalCall" />
+    <user-content ref="contentRef" @modal-call="handleModalCall" @editcall="handleEditCall" />
     <!-- 这里需要注意，usercontent中传递出来的事件 modalcall 对应这个@modal-call 这个是做监听的 必须以emit中的字符串中间-分隔为标准格式 -->
     <user-modal ref="modalRef" />
   </div>
@@ -23,6 +23,11 @@ const handleResetData = () => {
 }
 const handleModalCall = () => {
   modalRef.value?.setDialogVisible()
+}
+const handleEditCall = (itemData: any) => {
+  modalRef.value?.setDialogVisible(false, itemData)
+
+  // console.log(itemData)
 }
 </script>
 

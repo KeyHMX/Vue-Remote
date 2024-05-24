@@ -33,7 +33,9 @@
         </el-table-column>
         <el-table-column fixed="right" label="操作" width="120" align="center">
           <template #default="scope">
-            <el-button link type="primary" size="small">编辑</el-button>
+            <el-button link type="primary" size="small" @click="handleEditBtnClick(scope.row)"
+              >编辑</el-button
+            >
             <el-button link type="primary" size="small" @click="handleDeleteBtnClick(scope.row.id)"
               >删除</el-button
             >
@@ -96,9 +98,13 @@ function fetchUserListData(formData: any = {}) {
 const handleDeleteBtnClick = (id: any) => {
   systemStore.deleteUserByIdAction(id)
 }
+//edit actions
+function handleEditBtnClick(itemData: any) {
+  emit('editcall', itemData)
+}
 
 //emit the modal action
-const emit = defineEmits(['modalCall']) //call the new modal window action
+const emit = defineEmits(['modalCall', 'editcall']) //call the new modal window action
 const handleModalCall = () => {
   emit('modalCall')
 }

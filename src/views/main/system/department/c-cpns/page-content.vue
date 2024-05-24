@@ -25,7 +25,9 @@
         </el-table-column>
         <el-table-column fixed="right" label="操作" width="120" align="center">
           <template #default="scope">
-            <el-button link type="primary" size="small">编辑</el-button>
+            <el-button link type="primary" size="small" @click="handleEditBtnClick(scope.row)"
+              >编辑</el-button
+            >
             <el-button link type="primary" size="small" @click="handleDeleteBtnClick(scope.row.id)"
               >删除</el-button
             >
@@ -87,12 +89,18 @@ function fetchPageListData(formData: any = {}) {
 //delete actions
 const handleDeleteBtnClick = (id: any) => {
   systemStore.deletePageByIdAction('department', id)
+  console.log(id)
 }
 
 //emit the modal action
-const emit = defineEmits(['modalCall']) //call the new modal window action
+const emit = defineEmits(['modalCall', 'editCall']) //call the new modal window action
 const handleModalCall = () => {
+  //just the btn on the right head to new a department
   emit('modalCall')
+}
+//点击编辑按钮
+function handleEditBtnClick(itemData: any) {
+  emit('editCall', itemData)
 }
 defineExpose({ fetchPageListData })
 </script>

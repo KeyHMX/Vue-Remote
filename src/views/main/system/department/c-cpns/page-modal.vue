@@ -1,32 +1,20 @@
 <template>
   <div class="app">
-    <el-dialog v-model="dialogVisible" :title="isNewRef ? '新建用户' : '编辑用户'">
+    <el-dialog v-model="dialogVisible" title="新建部门" width="500" align-center>
       <div class="form">
         <el-form :model="formData" label-width="80px" size="large">
-          <el-form-item label="用户名" prop="name">
-            <el-input v-model="formData.name" placeholder="请输入用户名" />
+          <el-form-item label="部门名" prop="name">
+            <el-input v-model="formData.name" placeholder="请输入部门名" />
           </el-form-item>
-          <el-form-item label="真实姓名" prop="realname">
-            <el-input v-model="formData.realname" placeholder="请输入真实姓名" />
+          <el-form-item label="领导" prop="leader">
+            <el-input v-model="formData.leader" placeholder="请输入领导" />
           </el-form-item>
-          <el-form-item label="密码" prop="password">
-            <el-input v-model="formData.password" placeholder="请输入密码" show-password />
-          </el-form-item>
-          <el-form-item label="手机号码" prop="cellphone">
-            <el-input v-model="formData.cellphone" placeholder="请输入手机号码" />
-          </el-form-item>
-          <el-form-item label="选择角色" prop="roleId">
-            <el-select v-model="formData.roleId" placeholder="请选择角色" style="width: 100%">
-              <template v-for="item in entireRoles" :key="item.id">
-                <el-option :label="item.name" :value="item.id" />
-                <!-- 其实这里的value起到的是一个定位的作用 -->
-              </template>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="选择部门" prop="departmentId">
-            <el-select v-model="formData.departmentId" placeholder="请选择部门" style="width: 100%">
+
+          <el-form-item label="上级部门" prop="parentId">
+            <el-select v-model="formData.parentId" placeholder="请选择上级部门" style="width: 100%">
               <template v-for="item in entireDepartments" :key="item.id">
                 <el-option :label="item.name" :value="item.id" />
+                <!-- 其实这里的value起到的是一个定位的作用 -->
               </template>
             </el-select>
           </el-form-item>
@@ -54,17 +42,25 @@ const isNewRef = ref(true)
 const editRef = ref()
 const formData = reactive<any>({
   name: '',
-  realname: '',
-  password: '',
-  cellphone: '', //这里很奇怪，必须要输入手机号码才生效 不知道是什么原理
-  roleId: '',
-  departmentId: ''
+  leader: '',
+  parentId: ''
 })
 
 //请求数据了
 const mainStore = useMainStore()
 const systemStore = useSystemStore()
-const { entireDepartments, entireRoles } = storeToRefs(mainStore) //保持响应式，即若更改了服务器的值也会同步修改
+const { entireDepartments } = storeToRefs(mainStore) //保持响应式，即若更改了服务器的值也会同步修改
+
+// //点击取消时仅仅关闭即可
+// const setDialogVisible = () => {
+//   dialogVisible.value = true
+// }
+
+// //点击确定时的逻辑——调用接口进行数据的上传
+// const handleConfirmClick = () => {
+//   dialogVisible.value = false
+//   systemStore.newPageDataAction('department', formData)
+// }
 
 //点击取消时仅仅关闭即可
 const setDialogVisible = (isNew: boolean = true, itemData?: any) => {
@@ -89,9 +85,9 @@ const setDialogVisible = (isNew: boolean = true, itemData?: any) => {
 const handleConfirmClick = () => {
   dialogVisible.value = false
   if (!isNewRef.value && editRef.value) {
-    systemStore.editUserDataAction(editRef?.value.id, formData)
+    systemStore.editPageDataAction('department', editRef?.value.id, formData)
   } else {
-    systemStore.newUserDataAction(formData)
+    systemStore.newPageDataAction('department', formData)
   }
 }
 defineExpose({ setDialogVisible })
