@@ -6,7 +6,20 @@
       @reset-data="handleResetClick"
     />
     <!-- 哈哈，这里就是这个原因 query-data是因为在子组件中emit中的是'querydata' -->
-    <page-content ref="contentRef" @modal-call="handleModalCall" @edit-call="handleEditCall" />
+    <page-content
+      :content-config="contentConfig"
+      ref="contentRef"
+      @modal-call="handleModalCall"
+      @edit-call="handleEditCall"
+    >
+      <template #leader="scope">
+        <span class="leader">hhh: {{ scope.row.leader }} </span>
+        <span>{{ scope.hName }}</span>
+      </template>
+      <template #parent="scope">
+        <span class="parent">lll: {{ scope.row.parentId }} </span>
+      </template>
+    </page-content>
 
     <page-modal ref="modalRef" />
   </div>
@@ -14,10 +27,11 @@
 
 <script setup lang="ts" name="department">
 import pageSearch from '@/components/page-search/page-search.vue'
-import pageContent from './c-cpns/page-content.vue'
+import pageContent from '@/components/page-content/page-content.vue'
 import pageModal from './c-cpns/page-modal.vue'
 import { ref } from 'vue'
 import searchConfig from './config/search.config'
+import contentConfig from './config/content.config'
 
 const contentRef = ref<InstanceType<typeof pageContent>>()
 const modalRef = ref<InstanceType<typeof pageModal>>()
@@ -39,5 +53,11 @@ function handleEditCall(itemData: any) {
 
 <style scoped>
 .department {
+}
+.leader {
+  color: yellow;
+}
+.parent {
+  color: blue;
 }
 </style>
