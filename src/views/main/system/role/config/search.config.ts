@@ -5,8 +5,7 @@ const searchConfig = {
       type: 'input',
       prop: 'name',
       label: '角色名称',
-      placeholder: '请输入查询的角色名称',
-      initialValue: 'bbb'
+      placeholder: '请输入查询的角色名称'
     },
     {
       type: 'input',

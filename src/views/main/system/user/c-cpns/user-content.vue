@@ -73,7 +73,7 @@ const pageSize = ref(10)
 //获取userlist数据，进行展示
 //但这是异步的 可用computed
 
-const { usersList, usersTotalCount } = storeToRefs(systemStore) //为何用解构呢
+const { usersList, usersTotalCount } = storeToRefs(systemStore) //为何用解构呢 为了方便，不用每个地方都systemstore.usertotalcount
 fetchUserListData()
 // console.log(usersList)
 
