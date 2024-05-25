@@ -108,12 +108,12 @@ function fetchPageListData(formData: any = {}) {
   const info = { size, offset }
   //发起网络请求
   const formInfo = { ...formData, ...info }
-  systemStore.postPageListAction('department', formInfo)
+  systemStore.postPageListAction(props.contentConfig.pageName, formInfo) //这里将原本写的‘department’改为了配置文件里的pagename，封装性更强
 }
 
 //delete actions
 const handleDeleteBtnClick = (id: any) => {
-  systemStore.deletePageByIdAction('department', id)
+  systemStore.deletePageByIdAction(props.contentConfig.pageName, id)
   console.log(id)
 }
 

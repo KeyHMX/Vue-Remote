@@ -29,26 +29,14 @@
 import pageSearch from '@/components/page-search/page-search.vue'
 import pageContent from '@/components/page-content/page-content.vue'
 import pageModal from './c-cpns/page-modal.vue'
-import { ref } from 'vue'
 import searchConfig from './config/search.config'
 import contentConfig from './config/content.config'
+import useContent from '@/hooks/useContent'
+import useModal from '@/hooks/useModal'
 
-const contentRef = ref<InstanceType<typeof pageContent>>()
-const modalRef = ref<InstanceType<typeof pageModal>>()
-function handleQureyClick(formData: any) {
-  // console.log('已经点击')
-  contentRef.value?.fetchPageListData(formData)
-}
-function handleResetClick() {
-  contentRef.value?.fetchPageListData()
-}
-function handleModalCall() {
-  modalRef.value?.setDialogVisible()
-}
-//编辑按钮
-function handleEditCall(itemData: any) {
-  modalRef.value?.setDialogVisible(false, itemData)
-}
+const { contentRef, handleQureyClick, handleResetClick } = useContent()
+
+const { modalRef, handleEditCall, handleModalCall } = useModal()
 </script>
 
 <style scoped>
