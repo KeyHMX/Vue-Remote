@@ -88,7 +88,7 @@ const systemStore = useSystemStore()
 const setDialogVisible = (isNew: boolean = true, itemData?: any) => {
   dialogVisible.value = true
   isNewRef.value = isNew
-  console.log(itemData)
+  // console.log(itemData)
   if (!isNew && itemData) {
     for (const key in formData) {
       formData[key] = itemData[key]
@@ -96,20 +96,28 @@ const setDialogVisible = (isNew: boolean = true, itemData?: any) => {
     editRef.value = itemData //这里为什么要等于itemdata
   } else {
     for (const key in formData) {
-      formData[key] = ''
+      // formData[key] = ''
+      const item = props.modalConfig.formItems.find((item) => item.prop === key)
+      formData[key] = item ? item.initialValue : ''
     }
     editRef.value = null
   }
-  console.log(formData)
+  console.log(formData, 'formdata')
 }
 
 //点击确定时的逻辑——调用接口进行数据的上传
 const handleConfirmClick = () => {
   dialogVisible.value = false
+  let infoData = formData
+  if (props.otherInfo) {
+    infoData = { ...infoData, ...props.otherInfo }
+  }
+  console.log(infoData)
+  console.log(infoData, 'infodata')
   if (!isNewRef.value && editRef.value) {
-    systemStore.editPageDataAction(props.modalConfig.pageName, editRef?.value.id, formData)
+    systemStore.editPageDataAction(props.modalConfig.pageName, editRef?.value.id, infoData)
   } else {
-    systemStore.newPageDataAction(props.modalConfig.pageName, formData)
+    systemStore.newPageDataAction(props.modalConfig.pageName, infoData)
   }
 }
 defineExpose({ setDialogVisible })

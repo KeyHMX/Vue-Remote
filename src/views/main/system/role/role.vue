@@ -11,7 +11,19 @@
       @modal-call="handleModalCall"
       ref="contentRef"
     />
-    <page-modal :modal-config="modalConfig" ref="modalRef" />
+    <!-- 这里要加上这个:other-info的原因是组件之间需要进行通信，这里是父传子，传到page-modal中进行操作 -->
+    <page-modal :other-info="otherInfo" :modal-config="modalConfig" ref="modalRef">
+      <template #menulist>
+        <el-tree
+          ref="treeRef"
+          :data="entireMenus"
+          show-checkbox
+          node-key="id"
+          :props="{ children: 'children', label: 'name' }"
+          @check="handleElTreeCheck"
+        />
+      </template>
+    </page-modal>
   </div>
 </template>
 
@@ -24,10 +36,24 @@ import contentConfig from './config/content.config'
 import modalConfig from './config/modal.config'
 import useContent from '@/hooks/useContent'
 import useModal from '@/hooks/useModal'
+import useMainStore from '@/stores/main/main'
+import { storeToRefs } from 'pinia'
+import { ref } from 'vue'
+const mainStore = useMainStore()
+const { entireMenus } = storeToRefs(mainStore)
+const otherInfo = ref({})
 
 //解构各种逻辑
 const { contentRef, handleQureyClick, handleResetClick } = useContent()
 const { modalRef, handleEditCall, handleModalCall } = useModal()
+
+//逻辑
+function handleElTreeCheck(data1: any, data2: any) {
+  const menuList = [...data2.checkedKeys, ...data2.halfCheckedKeys]
+  // console.log(data2.checkedKeys)
+  console.log(menuList, 'menulist')
+  otherInfo.value = { menuList }
+}
 </script>
 
 <style scoped>
