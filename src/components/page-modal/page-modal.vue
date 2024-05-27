@@ -110,13 +110,14 @@ const handleConfirmClick = () => {
   dialogVisible.value = false
   let infoData = formData
   if (props.otherInfo) {
+    console.log('otherinfo remain', props.otherInfo)
     infoData = { ...infoData, ...props.otherInfo }
   }
-  console.log(infoData)
-  console.log(infoData, 'infodata')
+  //编辑
   if (!isNewRef.value && editRef.value) {
     systemStore.editPageDataAction(props.modalConfig.pageName, editRef?.value.id, infoData)
   } else {
+    //新建
     systemStore.newPageDataAction(props.modalConfig.pageName, infoData)
   }
 }

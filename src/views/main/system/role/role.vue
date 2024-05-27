@@ -38,21 +38,35 @@ import useContent from '@/hooks/useContent'
 import useModal from '@/hooks/useModal'
 import useMainStore from '@/stores/main/main'
 import { storeToRefs } from 'pinia'
-import { ref } from 'vue'
+import { nextTick, ref } from 'vue'
+import type { ElTree } from 'element-plus'
+import { mapMenuListToIds } from '@/utils/map-manus'
 const mainStore = useMainStore()
 const { entireMenus } = storeToRefs(mainStore)
 const otherInfo = ref({})
 
 //解构各种逻辑
 const { contentRef, handleQureyClick, handleResetClick } = useContent()
-const { modalRef, handleEditCall, handleModalCall } = useModal()
+const { modalRef, handleEditCall, handleModalCall } = useModal(editCallback)
 
-//逻辑
+//check逻辑
 function handleElTreeCheck(data1: any, data2: any) {
   const menuList = [...data2.checkedKeys, ...data2.halfCheckedKeys]
   // console.log(data2.checkedKeys)
-  console.log(menuList, 'menulist')
+  // console.log(menuList, 'menulist')
   otherInfo.value = { menuList }
+}
+//列表高亮回显
+const treeRef = ref<InstanceType<typeof ElTree>>()
+function editCallback(itemData: any) {
+  // nexttick是为了响应当前的操作的同时将这次操作的结果挂载到dom上
+  // nexttick 在vue3中 是一个微任务
+  nextTick(() => {
+    const menuIds = mapMenuListToIds(itemData.menuList)
+    console.log(menuIds)
+
+    treeRef.value?.setCheckedKeys(menuIds)
+  })
 }
 </script>
 

@@ -2,7 +2,7 @@
   <div class="app">
     <div class="header">
       <h3 class="title">{{ contentConfig?.header?.title ?? '数据列表' }}</h3>
-      <el-button type="primary" @click="handleModalCall">
+      <el-button v-if="isCreate" type="primary" @click="handleModalCall">
         {{ contentConfig?.header?.btnTitle ?? '新建数据' }}
       </el-button>
     </div>
@@ -19,10 +19,16 @@
           <template v-else-if="item.type === 'handler'">
             <el-table-column align="center" v-bind="item">
               <template #default="scope">
-                <el-button link type="primary" size="small" @click="handleEditBtnClick(scope.row)"
+                <el-button
+                  v-if="isUpdate"
+                  link
+                  type="primary"
+                  size="small"
+                  @click="handleEditBtnClick(scope.row)"
                   >编辑</el-button
                 >
                 <el-button
+                  v-if="isDelete"
                   link
                   type="primary"
                   size="small"
@@ -61,6 +67,7 @@
 </template>
 
 <script setup lang="ts">
+import usePermissons from '@/hooks/usePermissons'
 import useSystemStore from '@/stores/main/system/system'
 import { turnToBeijing } from '@/utils/format'
 import { storeToRefs } from 'pinia'
@@ -90,6 +97,11 @@ const props = defineProps<IProps>()
 //获取userlist数据，进行展示
 //但这是异步的 可用computed
 
+//获取是否有增删改查的权限
+const isCreate = usePermissons(`${props.contentConfig.pageName}:create`)
+const isDelete = usePermissons(`${props.contentConfig.pageName}:delete`)
+const isUpdate = usePermissons(`${props.contentConfig.pageName}:update`)
+const isQuery = usePermissons(`${props.contentConfig.pageName}:isquery`)
 const { pageList, pageTotalCount } = storeToRefs(systemStore) //为何用解构呢
 fetchPageListData()
 // console.log(usersList)
@@ -103,6 +115,7 @@ function handleCurrentChange() {
 
 //定义函数 用来发送网络请求
 function fetchPageListData(formData: any = {}) {
+  if (!isQuery) return
   const size = pageSize.value
   const offset = (currentPage.value - 1) * size
   const info = { size, offset }
@@ -125,6 +138,7 @@ const handleModalCall = () => {
 }
 //点击编辑按钮
 function handleEditBtnClick(itemData: any) {
+  console.log(isUpdate)
   emit('editCall', itemData)
 }
 defineExpose({ fetchPageListData })

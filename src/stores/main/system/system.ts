@@ -73,7 +73,7 @@ const useSystemStore = defineStore('system', {
     },
     async newPageDataAction(pageName: string, pageInfo: any) {
       const newResult = await newPageData(pageName, pageInfo)
-      console.log(newResult)
+      console.log(newResult, 'newresult')
       this.postPageListAction(pageName, { offset: 0, size: 10 })
 
       // 获取完整的数据
