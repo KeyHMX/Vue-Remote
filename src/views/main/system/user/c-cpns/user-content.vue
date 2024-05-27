@@ -2,7 +2,7 @@
   <div class="app">
     <div class="header">
       <h3 class="title">用户列表</h3>
-      <el-button type="primary" @click="handleModalCall">新建用户</el-button>
+      <el-button v-if="isCreate" type="primary" @click="handleModalCall">新建用户</el-button>
     </div>
     <div class="table">
       <el-table :data="usersList" style="width: 100%">
@@ -33,10 +33,20 @@
         </el-table-column>
         <el-table-column fixed="right" label="操作" width="120" align="center">
           <template #default="scope">
-            <el-button link type="primary" size="small" @click="handleEditBtnClick(scope.row)"
+            <el-button
+              v-if="isUpdate"
+              link
+              type="primary"
+              size="small"
+              @click="handleEditBtnClick(scope.row)"
               >编辑</el-button
             >
-            <el-button link type="primary" size="small" @click="handleDeleteBtnClick(scope.row.id)"
+            <el-button
+              v-if="isDelete"
+              link
+              type="primary"
+              size="small"
+              @click="handleDeleteBtnClick(scope.row.id)"
               >删除</el-button
             >
           </template>
@@ -63,18 +73,26 @@ import { turnToBeijing } from '@/utils/format'
 import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 import { defineEmits } from 'vue'
-//发起action 请求userlist的数据
+import usePermissons from '@/hooks/usePermissons'
+
 const systemStore = useSystemStore()
 const currentPage = ref(1)
 const pageSize = ref(10)
-
+//发起action 请求userlist的数据
+fetchUserListData()
 // systemStore.postUsersListAction()
 
 //获取userlist数据，进行展示
 //但这是异步的 可用computed
 
+// 用户的权限判断
+const isCreate = usePermissons('users:create')
+const isDelete = usePermissons('users:delete')
+const isUpdate = usePermissons('users:delete')
+const isQuery = usePermissons('users:query')
+
 const { usersList, usersTotalCount } = storeToRefs(systemStore) //为何用解构呢 为了方便，不用每个地方都systemstore.usertotalcount
-fetchUserListData()
+
 // console.log(usersList)
 
 function handleSizeChange() {
@@ -86,6 +104,8 @@ function handleCurrentChange() {
 
 //定义函数 用来发送网络请求
 function fetchUserListData(formData: any = {}) {
+  if (!isQuery) return
+  console.log('remain fetch', formData)
   const size = pageSize.value
   const offset = (currentPage.value - 1) * size
   const info = { size, offset }
@@ -106,6 +126,7 @@ function handleEditBtnClick(itemData: any) {
 //emit the modal action
 const emit = defineEmits(['modalCall', 'editcall']) //call the new modal window action
 const handleModalCall = () => {
+  console.log(isQuery)
   emit('modalCall')
 }
 defineExpose({ fetchUserListData })

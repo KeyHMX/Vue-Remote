@@ -94,24 +94,12 @@ const props = defineProps<IProps>()
 
 // systemStore.postUsersListAction()
 
-//获取userlist数据，进行展示
-//但这是异步的 可用computed
-
 //获取是否有增删改查的权限
 const isCreate = usePermissons(`${props.contentConfig.pageName}:create`)
 const isDelete = usePermissons(`${props.contentConfig.pageName}:delete`)
 const isUpdate = usePermissons(`${props.contentConfig.pageName}:update`)
 const isQuery = usePermissons(`${props.contentConfig.pageName}:isquery`)
 const { pageList, pageTotalCount } = storeToRefs(systemStore) //为何用解构呢
-fetchPageListData()
-// console.log(usersList)
-
-function handleSizeChange() {
-  fetchPageListData()
-}
-function handleCurrentChange() {
-  fetchPageListData()
-}
 
 //定义函数 用来发送网络请求
 function fetchPageListData(formData: any = {}) {
@@ -127,7 +115,6 @@ function fetchPageListData(formData: any = {}) {
 //delete actions
 const handleDeleteBtnClick = (id: any) => {
   systemStore.deletePageByIdAction(props.contentConfig.pageName, id)
-  console.log(id)
 }
 
 //emit the modal action
@@ -141,6 +128,16 @@ function handleEditBtnClick(itemData: any) {
   console.log(isUpdate)
   emit('editCall', itemData)
 }
+fetchPageListData()
+// console.log(usersList)
+
+function handleSizeChange() {
+  fetchPageListData()
+}
+function handleCurrentChange() {
+  fetchPageListData()
+}
+
 defineExpose({ fetchPageListData })
 </script>
 
