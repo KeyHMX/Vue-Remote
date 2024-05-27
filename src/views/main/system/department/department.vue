@@ -21,7 +21,7 @@
       </template>
     </page-content>
 
-    <page-modal :modal-config="modalConfigRef" ref="modalRef" />
+    <page-modal ref="modalRef" />
   </div>
 </template>
 
@@ -33,24 +33,6 @@ import searchConfig from './config/search.config'
 import contentConfig from './config/content.config'
 import useContent from '@/hooks/useContent'
 import useModal from '@/hooks/useModal'
-import { computed } from 'vue'
-import modalConfig from './config/modal.config'
-import useMainStore from '@/stores/main/main'
-
-// 对modalConfig进行操作
-const modalConfigRef = computed(() => {
-  const mainStore = useMainStore()
-  const departments = mainStore.entireDepartments.map((item) => {
-    return { label: item.name, value: item.id }
-  })
-  modalConfig.formItems.forEach((item) => {
-    if (item.prop === 'parentId') {
-      item.options.push(...departments)
-    }
-  })
-
-  return modalConfig
-})
 
 const { contentRef, handleQureyClick, handleResetClick } = useContent()
 
