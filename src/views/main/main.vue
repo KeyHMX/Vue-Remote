@@ -33,8 +33,12 @@ function handleFoldChange(flag: boolean) {
 </script>
 
 <style scoped lang="less">
+.el-header {
+  margin-bottom: 20px;
+}
 .main {
   height: 100%;
+  // display: flex;
 }
 .main-content {
   height: 100%;
